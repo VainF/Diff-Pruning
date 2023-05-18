@@ -25,7 +25,8 @@ from diffusers.optimization import get_scheduler
 from diffusers.training_utils import EMAModel
 from diffusers.utils import check_min_version, is_accelerate_version, is_tensorboard_available, is_wandb_available
 from diffusers.utils.import_utils import is_xformers_available
-from utils import set_dropout, UnlabeledImageFolder
+
+import utils
 
 logger = get_logger(__name__, log_level="INFO")
 
@@ -48,8 +49,10 @@ def _extract_into_tensor(arr, timesteps, broadcast_shape):
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Simple example of a training script.")
+    parser.add_argument("--pruned_model_ckpt", type=str, default=None)
+
     parser.add_argument(
-        "--dataset_name",
+        "--dataset",
         type=str,
         default=None,
         help=(
@@ -65,7 +68,7 @@ def parse_args():
         help="The config of the Dataset, leave as None if there's only one config.",
     )
     parser.add_argument(
-        "--model_config_name_or_path",
+        "--model_path",
         type=str,
         default=None,
         help="The config of the UNet model to train, leave as None to use standard DDPM configuration.",
@@ -77,14 +80,14 @@ def parse_args():
         help=(
             "A folder containing the training data. Folder contents must follow the structure described in"
             " https://huggingface.co/docs/datasets/image_dataset#imagefolder. In particular, a `metadata.jsonl` file"
-            " must exist to provide the captions for the images. Ignored if `dataset_name` is specified."
+            " must exist to provide the captions for the images. Ignored if `dataset` is specified."
         ),
     )
     parser.add_argument(
         "--output_dir",
         type=str,
         default="ddpm-model-64",
-        help="The output directory where the model predictions and checkpoints will be written.",
+        help="The output directory where the checkpoints will be written.",
     )
     parser.add_argument("--overwrite_output_dir", action="store_true")
     parser.add_argument(
@@ -117,12 +120,6 @@ def parse_args():
         ),
     )
     parser.add_argument(
-        "--random_flip",
-        default=False,
-        action="store_true",
-        help="whether to randomly flip images horizontally",
-    )
-    parser.add_argument(
         "--train_batch_size", type=int, default=16, help="Batch size (per device) for the training dataloader."
     )
     parser.add_argument(
@@ -147,9 +144,7 @@ def parse_args():
         action="store_true",
         default=False,
     )
-    parser.add_argument("--num_epochs", type=int, default=100)
     parser.add_argument("--num_iters", type=int, default=10000)
-    parser.add_argument("--save_images_steps", type=int, default=1000, help="How often to save images during training.")
     parser.add_argument(
         "--save_model_steps", type=int, default=1000, help="How often to save the model during training."
     )
@@ -168,7 +163,7 @@ def parse_args():
     parser.add_argument(
         "--lr_scheduler",
         type=str,
-        default="cosine",
+        default="constant",
         help=(
             'The scheduler type to use. Choose between ["linear", "cosine", "cosine_with_restarts", "polynomial",'
             ' "constant", "constant_with_warmup"]'
@@ -253,16 +248,6 @@ def parse_args():
         ),
     )
     parser.add_argument(
-        "--checkpoints_total_limit",
-        type=int,
-        default=None,
-        help=(
-            "Max number of checkpoints to store. Passed as `total_limit` to the `Accelerator` `ProjectConfiguration`."
-            " See Accelerator::save_state https://huggingface.co/docs/accelerate/package_reference/accelerator#accelerate.Accelerator.save_state"
-            " for more docs"
-        ),
-    )
-    parser.add_argument(
         "--resume_from_checkpoint",
         type=str,
         default=None,
@@ -280,16 +265,14 @@ def parse_args():
     if env_local_rank != -1 and env_local_rank != args.local_rank:
         args.local_rank = env_local_rank
 
-    if args.dataset_name is None and args.train_data_dir is None:
+    if args.dataset is None and args.train_data_dir is None:
         raise ValueError("You must specify either a dataset name from the hub or a train data directory.")
 
     return args
 
 def main(args):
     logging_dir = os.path.join(args.output_dir, args.logging_dir)
-    
-    accelerator_project_config = ProjectConfiguration(total_limit=args.checkpoints_total_limit)
-
+    accelerator_project_config = ProjectConfiguration()
     accelerator = Accelerator(
         gradient_accumulation_steps=args.gradient_accumulation_steps,
         mixed_precision=args.mixed_precision,
@@ -301,7 +284,6 @@ def main(args):
     if args.logger == "tensorboard":
         if not is_tensorboard_available():
             raise ImportError("Make sure to install tensorboard if you want to use it for logging during training.")
-
     elif args.logger == "wandb":
         if not is_wandb_available():
             raise ImportError("Make sure to install wandb if you want to use it for logging during training.")
@@ -324,57 +306,36 @@ def main(args):
         if args.output_dir is not None:
             os.makedirs(args.output_dir, exist_ok=True)
 
-    # initialize models
-    if os.path.isdir(args.model_config_name_or_path) and os.path.exists(os.path.join(args.model_config_name_or_path, "unet_pruned.pth")):
-        model_path = "unet_ema_pruned.pth" if args.load_ema else "unet_pruned.pth"
-        print("Loading pruned model from {}".format(os.path.join(args.model_config_name_or_path, model_path)))
-        model = torch.load(os.path.join(args.model_config_name_or_path, model_path), map_location='cpu')
-    else:
-        print("Loading pretrained model from {}".format(args.model_config_name_or_path))
-        model = DDPMPipeline.from_pretrained(args.model_config_name_or_path).unet
-
-    # Initialize the scheduler
-    accepts_prediction_type = "prediction_type" in set(inspect.signature(DDPMScheduler.__init__).parameters.keys())
-    if accepts_prediction_type:
-        noise_scheduler = DDPMScheduler(
-            num_train_timesteps=args.ddpm_num_steps,
-            beta_schedule=args.ddpm_beta_schedule,
-            prediction_type=args.prediction_type,
-            #variance_type='fixed_large' if 'cifar' in args.dataset_name else 'fixed_small',
+    # Loading pruned model
+    if os.path.isdir(args.model_path):
+        if args.pruned_model_ckpt is not None:
+            print("Loading pruned model from {}".format(args.pruned_model_ckpt))
+            unet = torch.load(args.pruned_model_ckpt, map_location='cpu').eval()
+        else:
+            print("Loading model from {}".format(args.model_path))
+            subfolder = 'unet' if os.path.isdir(os.path.join(args.model_path, 'unet')) else None
+            unet = UNet2DModel.from_pretrained(args.model_path, subfolder=subfolder).eval()
+        pipeline = DDPMPipeline(
+            unet=unet,
+            scheduler=DDPMScheduler.from_pretrained(args.model_path, subfolder="scheduler")
         )
-    else:
-        noise_scheduler = DDPMScheduler(num_train_timesteps=args.ddpm_num_steps, beta_schedule=args.ddpm_beta_schedule)
+    # Loading standard model
+    else:  
+        print("Loading pretrained model from {}".format(args.model_path))
+        pipeline = DDPMPipeline.from_pretrained(
+            args.model_path,
+        )
+    model = pipeline.unet
+    noise_scheduler = pipeline.scheduler
 
     # Get the datasets: you can either provide your own training and evaluation files (see below)
-    if 'cifar10' in args.dataset_name:
-        augmentations = transforms.Compose(
-            [
-                transforms.RandomHorizontalFlip() if args.random_flip else transforms.Lambda(lambda x: x),
-                transforms.ToTensor(),
-                transforms.Normalize([0.5], [0.5]),
-            ]
-        )
-        dataset = torchvision.datasets.CIFAR10(root='./data/cifar10', train=True, download=False, transform=augmentations)
-    else:
-        augmentations = transforms.Compose(
-            [
-                transforms.Resize(args.resolution, interpolation=transforms.InterpolationMode.BILINEAR),
-                transforms.CenterCrop(args.resolution) if args.center_crop else transforms.RandomCrop(args.resolution),
-                transforms.RandomHorizontalFlip() if args.random_flip else transforms.Lambda(lambda x: x),
-                transforms.ToTensor(),
-                transforms.Normalize([0.5], [0.5]),
-            ]
-        )
-        if 'celeba' in args.dataset_name.lower():
-            dataset = UnlabeledImageFolder(args.dataset_name, transform=augmentations, exts=['png'])
-        else:
-            dataset = UnlabeledImageFolder(args.dataset_name, transform=augmentations, exts=['webp'])
+    dataset = utils.get_dataset(args.dataset)
     logger.info(f"Dataset size: {len(dataset)}")
     train_dataloader = torch.utils.data.DataLoader(
         dataset, batch_size=args.train_batch_size, shuffle=True, num_workers=args.dataloader_num_workers
     )
+    num_epochs = math.ceil(args.num_iters / len(train_dataloader))
 
-    args.num_epochs = int(args.num_iters // len(train_dataloader))+1 # adjust num_epochs
     # Create EMA for the model.
     if args.use_ema:
         ema_model = EMAModel(
@@ -401,7 +362,7 @@ def main(args):
         args.lr_scheduler,
         optimizer=optimizer,
         num_warmup_steps=args.lr_warmup_steps * args.gradient_accumulation_steps,
-        num_training_steps=(len(train_dataloader) * args.num_epochs),
+        num_training_steps=(len(train_dataloader) * num_epochs),
     )
 
     # Prepare everything with our `accelerator`.
@@ -423,28 +384,27 @@ def main(args):
 
     logger.info("***** Running training *****")
     logger.info(f"  Num examples = {len(dataset)}")
-    logger.info(f"  Num Epochs = {args.num_epochs}")
     logger.info(f"  Instantaneous batch size per device = {args.train_batch_size}")
     logger.info(f"  Total train batch size (w. parallel, distributed & accumulation) = {total_batch_size}")
     logger.info(f"  Gradient Accumulation steps = {args.gradient_accumulation_steps}")
+    logger.info(f"  Num Epochs = {num_epochs}")
     logger.info(f"  Total optimization steps = {args.num_iters}")
 
     global_step = 0
     first_epoch = 0
 
-    # svae the shell command
+    # save the shell command
     if accelerator.is_main_process:
         with open(os.path.join(args.output_dir, 'run.sh'), 'w') as f:
             f.write('python ' + ' '.join(sys.argv))
 
     # setup dropout
     if args.dropout>0:
-        set_dropout(model, args.dropout)
+        utils.set_dropout(model, args.dropout)
 
     # generate images before training
     if accelerator.is_main_process:
-        unet = accelerator.unwrap_model(model)
-        unet.eval()
+        unet = accelerator.unwrap_model(model).eval()
         if args.use_ema:
             ema_model.store(unet.parameters())
             ema_model.copy_to(unet.parameters())
@@ -462,7 +422,6 @@ def main(args):
             ema_model.restore(unet.parameters())
         os.makedirs(os.path.join(args.output_dir, 'vis'), exist_ok=True)
         torchvision.utils.save_image(torch.from_numpy(images).permute([0, 3, 1, 2]), os.path.join(args.output_dir, 'vis', 'before_training.png'))
-        # denormalize the images and save to tensorboard
         images_processed = (images * 255).round().astype("uint8")
         if args.logger == "tensorboard":
             if is_accelerate_version(">=", "0.17.0.dev0"):
@@ -478,10 +437,11 @@ def main(args):
             )
         del unet
         del pipeline
-                
+
+    accelerator.wait_for_everyone()    
     # Train!
     os.makedirs(os.path.join(args.output_dir, 'vis'), exist_ok=True)
-    for epoch in range(first_epoch, args.num_epochs):
+    for epoch in range(first_epoch, num_epochs):
         progress_bar = tqdm(total=num_update_steps_per_epoch, disable=not accelerator.is_local_main_process)
         progress_bar.set_description(f"Epoch {epoch}")
         for step, batch in enumerate(train_dataloader):
@@ -491,18 +451,23 @@ def main(args):
                 if step % args.gradient_accumulation_steps == 0:
                     progress_bar.update(1)
                 continue
-
             if isinstance(batch, (list, tuple)):
                 clean_images = batch[0]
             else:
                 clean_images = batch
-            # Sample noise that we'll add to the images
             noise = torch.randn(clean_images.shape).to(clean_images.device)
             bsz = clean_images.shape[0]
-            # Sample a random timestep for each image
+
+            # The standard training procedure in diffusers
+            #timesteps = torch.randint(
+            #    0, noise_scheduler.config.num_train_timesteps, (bsz,), device=clean_images.device
+            #).long()
+
+            # Our experiements were conduct on https://github.com/ermongroup/ddim/blob/main/runners/diffusion.py
             timesteps = torch.randint(
-                0, noise_scheduler.config.num_train_timesteps, (bsz,), device=clean_images.device
-            ).long()
+                low=0, high=noise_scheduler.config.num_train_timesteps, size=(bsz // 2 + 1,)
+            ).to(clean_images.device)
+            timesteps = torch.cat([timesteps, noise_scheduler.config.num_train_timesteps - timesteps - 1], dim=0)[:bsz]
 
             # Add noise to the clean images according to the noise magnitude at each timestep
             # (this is the forward diffusion process)
@@ -540,40 +505,33 @@ def main(args):
                 progress_bar.update(1)
                 global_step += 1
 
-                #if global_step % args.checkpointing_steps == 0:
-                #    if accelerator.is_main_process:
-                #        save_path = os.path.join(args.output_dir, f"checkpoint-{global_step}")
-                #        accelerator.save_state(save_path)
-                #        logger.info(f"Saved state to {save_path}")
-
             logs = {"loss": loss.detach().item(), "lr": lr_scheduler.get_last_lr()[0], "step": global_step}
             if args.use_ema:
                 logs["ema_decay"] = ema_model.cur_decay_value
             progress_bar.set_postfix(**logs)
             accelerator.log(logs, step=global_step)
 
-            # Generate sample images for visual inspection
+            # Save the model & generate sample images 
             if global_step % args.save_model_steps == 0:
                 accelerator.wait_for_everyone()
                 if accelerator.is_main_process:
                     # save the model
-                    model.eval()
-                    unet = accelerator.unwrap_model(model)
-                    unet.eval()
+                    unet = accelerator.unwrap_model(model).eval()
                     unet.zero_grad()
-                    torch.save(unet, os.path.join(args.output_dir, 'unet_pruned.pth'))
-                    torch.save(unet, os.path.join(args.output_dir, 'unet_pruned-{}.pth'.format(global_step)))
+                    os.makedirs(os.path.join(args.output_dir, 'pruned'), exist_ok=True)
+                    torch.save(unet, os.path.join(args.output_dir, 'pruned', 'unet_pruned-{}.pth'.format(global_step)))
                     if args.use_ema:
                         ema_model.store(unet.parameters())
                         ema_model.copy_to(unet.parameters())
-                        torch.save(unet, os.path.join(args.output_dir, 'unet_ema_pruned.pth'))
                         torch.save(unet, os.path.join(args.output_dir, 'unet_ema_pruned-{}.pth'.format(global_step)))
                     pipeline = DDPMPipeline(
                         unet=unet,
                         scheduler=noise_scheduler,
                     )
-                    pipeline.save_pretrained(args.output_dir)
-                    
+                    pipeline.save_pretrained(args.output_dir) 
+
+                    # generate images
+                    logger.info("Sampling images...")
                     pipeline = DDIMPipeline(
                         unet=unet,
                         scheduler=DDIMScheduler(num_train_timesteps=args.ddpm_num_steps)
@@ -587,7 +545,7 @@ def main(args):
 
                     if args.use_ema:
                         ema_model.restore(unet.parameters())
-                    torchvision.utils.save_image(torch.from_numpy(images).permute([0, 3, 1, 2]), os.path.join(args.output_dir, 'vis', 'vis-{}.png'.format(global_step)))
+                    torchvision.utils.save_image(torch.from_numpy(images).permute([0, 3, 1, 2]), os.path.join(args.output_dir, 'vis', 'iter-{}.png'.format(global_step)))
                     # denormalize the images and save to tensorboard
                     images_processed = (images * 255).round().astype("uint8")
 
@@ -610,10 +568,8 @@ def main(args):
                 accelerator.wait_for_everyone()
                 accelerator.end_training()
                 return
-        
         progress_bar.close()
         accelerator.wait_for_everyone()
-
     accelerator.end_training()
 
 
