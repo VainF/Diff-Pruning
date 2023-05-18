@@ -1,7 +1,7 @@
 # Diff-Pruning: Structural Pruning for Diffusion Models
 
 <div align="center">
-<img src="assets/framework.png" width="90%"></img>
+<img src="assets/framework.png" width="80%"></img>
 </div>
 
 ## Introduction
