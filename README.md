@@ -11,6 +11,10 @@ This work presents *Diff-Pruning*, an efficient structrual pruning method for di
 <img src="assets/LSUN.png" width="80%"></img>
 </div>
 
+## TODO List
+- [ ] Support more diffusion models from Diffuser
+- [ ] Upload checkpoints of pruned models
+
 ## Quick Start
 ### 0. Data & Pretrained Model
 Download and extract CIFAR-10 images to *data/cifar10_images*
