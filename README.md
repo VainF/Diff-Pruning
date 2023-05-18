@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This work present *Diff-Pruning*, an efficient compression method for diffusion models.Our empirical assessment, undertaken across four diverse datasets highlights two primary benefits of our proposed method: 1) ``Efficiency``: it enables approximately a 50% reduction in FLOPs at a mere 10% to 20% of the original training expenditure; 2) ``Consistency``: the pruned diffusion models inherently preserve generative behavior congruent with their pre-trained progenitors.
+This work present *Diff-Pruning*, an efficient structrual pruning method for diffusion models. Our empirical assessment, undertaken across four diverse datasets highlights two primary benefits of our proposed method: 1) ``Efficiency``: it enables approximately a 50% reduction in FLOPs at a mere 10% to 20% of the original training expenditure; 2) ``Consistency``: the pruned diffusion models inherently preserve generative behavior congruent with their pre-trained progenitors.
 
 <div align="center">
 <img src="assets/LSUN.png" width="100%"></img>
@@ -58,12 +58,12 @@ python fid_score.py run/sample/ddpm_cifar10_pruned run/fid_stats_cifar10.npz --d
 
 ## Results
 <div align="center">
-<img src="assets/exp.png" width="100%"></img>
+<img src="assets/exp.png" width="70%"></img>
 </div>
 
 ## Acknowledgement
 
-This project is heavily based on [Diffusers](https://github.com/huggingface/diffusers), [Torch-Pruning](https://github.com/VainF/Torch-Pruning), [pytorch-fid](https://github.com/mseitzer/pytorch-fid). And our original experiments were conducted on [ddim](https://github.com/ermongroup/ddim). 
+This project is heavily based on [Diffusers](https://github.com/huggingface/diffusers), [Torch-Pruning](https://github.com/VainF/Torch-Pruning), [pytorch-fid](https://github.com/mseitzer/pytorch-fid). Our experiments were conducted on [ddim](https://github.com/ermongroup/ddim). 
 
 
 ## Citation
