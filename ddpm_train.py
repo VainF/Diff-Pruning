@@ -519,10 +519,12 @@ def main(args):
                     unet = accelerator.unwrap_model(model).eval()
                     unet.zero_grad()
                     os.makedirs(os.path.join(args.output_dir, 'pruned'), exist_ok=True)
+                    torch.save(unet, os.path.join(args.output_dir, 'pruned', 'unet_pruned.pth'.format(global_step)))
                     torch.save(unet, os.path.join(args.output_dir, 'pruned', 'unet_pruned-{}.pth'.format(global_step)))
                     if args.use_ema:
                         ema_model.store(unet.parameters())
                         ema_model.copy_to(unet.parameters())
+                        torch.save(unet, os.path.join(args.output_dir, 'unet_ema_pruned.pth'.format(global_step)))
                         torch.save(unet, os.path.join(args.output_dir, 'unet_ema_pruned-{}.pth'.format(global_step)))
                     pipeline = DDPMPipeline(
                         unet=unet,
