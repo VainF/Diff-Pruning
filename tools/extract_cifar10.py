@@ -9,7 +9,7 @@ args = parser.parse_args()
 os.makedirs(args.output, exist_ok=True)
 
 # Define the path to the folder where the images will be saved
-save_path = os.path.join(args.output, 'images')
+save_path = os.path.join(args.output, 'cifar10_images')
 
 # Create the folder if it doesn't exist
 if not os.path.exists(save_path):

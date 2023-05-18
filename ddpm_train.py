@@ -524,8 +524,8 @@ def main(args):
                     if args.use_ema:
                         ema_model.store(unet.parameters())
                         ema_model.copy_to(unet.parameters())
-                        torch.save(unet, os.path.join(args.output_dir, 'unet_ema_pruned.pth'.format(global_step)))
-                        torch.save(unet, os.path.join(args.output_dir, 'unet_ema_pruned-{}.pth'.format(global_step)))
+                        torch.save(unet, os.path.join(args.output_dir, 'pruned', 'unet_ema_pruned.pth'.format(global_step)))
+                        torch.save(unet, os.path.join(args.output_dir, 'pruned', 'unet_ema_pruned-{}.pth'.format(global_step)))
                     pipeline = DDPMPipeline(
                         unet=unet,
                         scheduler=noise_scheduler,
