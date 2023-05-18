@@ -43,6 +43,8 @@ bash scripts/sample_ddpm_cifar10_pruned.sh
 bash scripts/sample_ddpm_cifar10_pretrained.sh
 ```
 
+Multi-processing sampling are supported. Please refer to [scripts/sample_ddpm_cifar10_pretrained_distributed.sh](scripts/sample_ddpm_cifar10_pretrained_distributed.sh).
+
 ### 4. Computing FID score
 This script is modified from https://github.com/mseitzer/pytorch-fid. 
 
@@ -55,6 +57,7 @@ python fid_score.py --save-stats data/cifar10_images run/fid_stats_cifar10.npz -
 # Compute the FID score of sampled images
 python fid_score.py run/sample/ddpm_cifar10_pruned run/fid_stats_cifar10.npz --device cuda:0 --batch-size 256
 ```
+
 
 ## Results
 <div align="center">
