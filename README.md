@@ -43,7 +43,7 @@ bash scripts/sample_ddpm_cifar10_pruned.sh
 bash scripts/sample_ddpm_cifar10_pretrained.sh
 ```
 
-### 4. Compute the FID score
+### 4. Computing FID score
 This script is modified from https://github.com/mseitzer/pytorch-fid. 
 
 ```bash
