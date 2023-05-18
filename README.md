@@ -62,7 +62,9 @@ python fid_score.py run/sample/ddpm_cifar10_pruned run/fid_stats_cifar10.npz --d
 ## Results
 <div align="center">
 <img src="assets/exp.png" width="70%"></img>
+<img src="assets/exp2.png" width="70%"></img>
 </div>
+
 
 ## Acknowledgement
 
