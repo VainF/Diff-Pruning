@@ -68,7 +68,6 @@ python fid_score.py run/sample/ddpm_cifar10_pruned run/fid_stats_cifar10.npz --d
 
 This project is heavily based on [Diffusers](https://github.com/huggingface/diffusers), [Torch-Pruning](https://github.com/VainF/Torch-Pruning), [pytorch-fid](https://github.com/mseitzer/pytorch-fid). Our experiments were conducted on [ddim](https://github.com/ermongroup/ddim). 
 
-
 ## Citation
 If you find this work helpful, please cite:
 ```
