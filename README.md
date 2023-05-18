@@ -5,7 +5,7 @@
 This work present *Diff-Pruning*, an efficient structrual pruning method for diffusion models. Our empirical assessment, undertaken across four diverse datasets highlights two primary benefits of our proposed method: 1) ``Efficiency``: it enables approximately a 50% reduction in FLOPs at a mere 10% to 20% of the original training expenditure; 2) ``Consistency``: the pruned diffusion models inherently preserve generative behavior congruent with their pre-trained progenitors.
 
 <div align="center">
-<img src="assets/LSUN.png" width="100%"></img>
+<img src="assets/LSUN.png" width="90%"></img>
 </div>
 
 ## Quick Start
