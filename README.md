@@ -12,7 +12,7 @@ This work presents *Diff-Pruning*, an efficient structrual pruning method for di
 </div>
 
 ## TODO List
-- [ ] Support more diffusion models from Diffuser
+- [ ] Support more diffusion models from Diffusers
 - [ ] Upload checkpoints of pruned models
 
 ## Quick Start
