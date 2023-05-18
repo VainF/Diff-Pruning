@@ -5,8 +5,6 @@ import inspect
 import logging
 import math
 import os, sys
-from pathlib import Path
-from typing import Optional
 
 import accelerate
 import torch
@@ -14,7 +12,6 @@ import torch.nn.functional as F
 from accelerate import Accelerator
 from accelerate.logging import get_logger
 from accelerate.utils import ProjectConfiguration
-from huggingface_hub import HfFolder, Repository, create_repo, whoami
 from packaging import version
 from torchvision import transforms
 import torchvision
@@ -23,8 +20,7 @@ import diffusers
 from diffusers import DDPMPipeline, DDPMScheduler, UNet2DModel, DDIMPipeline, DDIMScheduler
 from diffusers.optimization import get_scheduler
 from diffusers.training_utils import EMAModel
-from diffusers.utils import check_min_version, is_accelerate_version, is_tensorboard_available, is_wandb_available
-from diffusers.utils.import_utils import is_xformers_available
+from diffusers.utils import is_accelerate_version, is_tensorboard_available, is_wandb_available
 
 import utils
 
