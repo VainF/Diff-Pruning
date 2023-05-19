@@ -58,9 +58,6 @@ bash scripts/finetune_ddpm_cifar10.sh
 </div>
 
 
-
-
-
 ### 3. Sampling
 **Pruned:** Sample and save images to *run/sample/ddpm_cifar10_pruned*
 ```bash
@@ -87,6 +84,20 @@ python fid_score.py --save-stats data/cifar10_images run/fid_stats_cifar10.npz -
 python fid_score.py run/sample/ddpm_cifar10_pruned run/fid_stats_cifar10.npz --device cuda:0 --batch-size 256
 ```
 
+## Prune pre-trained DDPMs from Huggingface
+
+Example: [google/ddpm-ema-bedroom-256](https://huggingface.co/google/ddpm-ema-bedroom-256)
+```bash
+python ddpm_prune.py \
+--dataset "<path/to/imagefoler>" \  
+--model_path google/ddpm-ema-bedroom-256 \
+--save_path run/pruned/ddpm_ema_bedroom_256_pruned \
+--pruning_ratio 0.05 \
+--batch_size 4 \
+--pruner "<random|magnitude|taylor|diff-pruning>" \
+--thr 0.05 \
+--device cuda:0 \
+```
 
 ## Results
 <div align="center">

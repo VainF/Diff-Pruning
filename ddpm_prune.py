@@ -30,19 +30,20 @@ batch_size = args.batch_size
 dataset = args.dataset
 
 if __name__=='__main__':
-    dataset = utils.get_dataset(args.dataset)
-    print(f"Dataset size: {len(dataset)}")
-    train_dataloader = torch.utils.data.DataLoader(
-        dataset, batch_size=args.batch_size, shuffle=True, num_workers=4, drop_last=True
-    )
-    import torch_pruning as tp
-
+    
     # loading images for gradient-based pruning
-    clean_images = iter(train_dataloader).next()
-    if isinstance(clean_images, (list, tuple)):
-        clean_images = clean_images[0]
-    clean_images = clean_images.to(args.device)
-    noise = torch.randn(clean_images.shape).to(clean_images.device)
+    if args.pruner in ['taylor', 'diff-pruning']:
+        dataset = utils.get_dataset(args.dataset)
+        print(f"Dataset size: {len(dataset)}")
+        train_dataloader = torch.utils.data.DataLoader(
+            dataset, batch_size=args.batch_size, shuffle=True, num_workers=4, drop_last=True
+        )
+        import torch_pruning as tp
+        clean_images = iter(train_dataloader).next()
+        if isinstance(clean_images, (list, tuple)):
+            clean_images = clean_images[0]
+        clean_images = clean_images.to(args.device)
+        noise = torch.randn(clean_images.shape).to(clean_images.device)
 
     # Loading pretrained model
     print("Loading pretrained model from {}".format(args.model_path))
