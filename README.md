@@ -47,12 +47,12 @@ bash scripts/finetune_ddpm_cifar10.sh
 ```
 
 ### 3. Sampling
-**Pruned:** Sample images from the pruned models. All images will be saved to *run/sample/ddpm_cifar10_pruned*
+**Pruned:** Sample and save images to *run/sample/ddpm_cifar10_pruned*
 ```bash
 bash scripts/sample_ddpm_cifar10_pruned.sh
 ```
 
-**Pretrained:** Sample images from the pre-trained models. All images will be saved to *run/sample/ddpm_cifar10_pruned*
+**Pretrained:** Sample and save images to *run/sample/ddpm_cifar10_pretrained*
 ```bash
 bash scripts/sample_ddpm_cifar10_pretrained.sh
 ```
