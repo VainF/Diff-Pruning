@@ -46,6 +46,21 @@ Finetune the model and save it at *run/finetuned/ddpm_cifar10_pruned_post_traini
 bash scripts/finetune_ddpm_cifar10.sh
 ```
 
+<div style="display: flex; justify-content: center;">
+  <div style="flex: 1; text-align: center;">
+    <img src="assets/before_training.png" alt="Before Training" style="width: 40%;">
+    <p><em>Image 1: Before Training (The pruned model)</em></p>
+  </div>
+  <div style="flex: 1; text-align: center;">
+    <img src="assets/iter-8000.png" alt="After 1000 Iterations" style="width: 40%;">
+    <p><em>Image 2: After 8000 Iterations</em></p>
+  </div>
+</div>
+
+
+
+
+
 ### 3. Sampling
 **Pruned:** Sample and save images to *run/sample/ddpm_cifar10_pruned*
 ```bash
