@@ -20,6 +20,7 @@ This work presents *Diff-Pruning*, an efficient structrual pruning method for di
 - [ ] Support more diffusion models from Diffusers
 - [ ] Upload checkpoints of pruned models
 - [ ] Training scripts for CelebA-HQ, LSUN Church & LSUN Bedroom
+- [ ] Align the performance with the [DDIM Repo](https://github.com/ermongroup/ddim). Our original exp code on DDIM will also be released.
 
 ## Quick Start
 ### 0. Data & Pretrained Model
