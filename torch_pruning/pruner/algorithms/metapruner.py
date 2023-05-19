@@ -226,13 +226,19 @@ class MetaPruner:
                 if n_pruned <= 0:
                     continue
                 if ch_groups > 1:
-                    imp = imp[:len(imp)//ch_groups]
-                imp_argsort = torch.argsort(imp)
-                pruning_idxs = imp_argsort[:(n_pruned//ch_groups)]
-                if ch_groups > 1:
-                    group_size = current_channels//ch_groups
-                    pruning_idxs = torch.cat(
-                        [pruning_idxs+group_size*i for i in range(ch_groups)], 0)
+                    group_size = current_channels // ch_groups
+                    pruning_idxs = []
+                    n_pruned_per_group = n_pruned // ch_groups # max(1, n_pruned // ch_groups)
+                    for chg in range(ch_groups):
+                        sub_group_imp = imp[chg*group_size: (chg+1)*group_size]
+                        sub_imp_argsort = torch.argsort(sub_group_imp)
+                        sub_pruning_idxs = sub_imp_argsort[:n_pruned_per_group]+chg*group_size
+                        pruning_idxs.append(sub_pruning_idxs)
+                    pruning_idxs = torch.cat(pruning_idxs, 0)
+                else:
+                    imp_argsort = torch.argsort(imp)
+                    pruning_idxs = imp_argsort[:(n_pruned//ch_groups)]
+                    
                 group = self.DG.get_pruning_group(
                     module, pruning_fn, pruning_idxs.tolist())
                 if self.DG.check_pruning_group(group):
