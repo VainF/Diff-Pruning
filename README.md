@@ -19,7 +19,7 @@ This work presents *Diff-Pruning*, an efficient structrual pruning method for di
 ## TODO List
 - [ ] Support more diffusion models from Diffusers
 - [ ] Upload checkpoints of pruned models
-- [ ] Scripts for CelebA, LSUN Church & LSUN Bedroom
+- [ ] Training scripts for CelebA-HQ, LSUN Church & LSUN Bedroom
 
 ## Quick Start
 ### 0. Data & Pretrained Model
