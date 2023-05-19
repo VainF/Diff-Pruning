@@ -98,9 +98,10 @@ if __name__=='__main__':
                 model_output = model(noisy_images, timesteps).sample
                 loss = torch.nn.functional.mse_loss(model_output, noise) 
                 loss.backward() 
-
-                if loss>loss_max: loss_max = loss
-                if loss<loss_max * args.thr: break # taylor expansion over pruned timesteps ( L_t / L_max > thr )
+                
+                if args.pruner=='diff-pruning':
+                    if loss>loss_max: loss_max = loss
+                    if loss<loss_max * args.thr: break # taylor expansion over pruned timesteps ( L_t / L_max > thr )
 
         for g in pruner.step(interactive=True):
             g.prune()
