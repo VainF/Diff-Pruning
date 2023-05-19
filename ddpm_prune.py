@@ -56,13 +56,13 @@ if __name__=='__main__':
 
     if args.pruning_ratio>0:
         if args.pruner == 'taylor':
-            imp = tp.importance.TaylorImportance() 
+            imp = tp.importance.TaylorImportance(multivariable=True) # standard first-order taylor expansion
         elif args.pruner == 'random' or args.pruner=='reinit':
             imp = tp.importance.RandomImportance()
         elif args.pruner == 'magnitude':
             imp = tp.importance.MagnitudeImportance()
         elif args.pruner == 'diff-pruning':
-            imp = tp.importance.TaylorImportance(multivariable=False) 
+            imp = tp.importance.TaylorImportance(multivariable=False) # a modified version, estimating the accumulated error of weight removal
         else:
             raise NotImplementedError
 
