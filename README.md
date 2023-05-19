@@ -34,26 +34,26 @@ bash scripts/prune_ddpm_cifar10.sh 0.3  # pruning ratio = 30\%
 ```
 
 ### 2. Finetuning (Post-Training)
-Finetune the model and save it as *run/finetuned/ddpm_cifar10_pruned_post_training*
+Finetune the model and save it at *run/finetuned/ddpm_cifar10_pruned_post_training*
 ```bash
 bash scripts/finetune_ddpm_cifar10.sh
 ```
 
 ### 3. Sampling
-**Pruned:** Sampled images from pruned models. All images will be saved to *run/sample/ddpm_cifar10_pruned*
+**Pruned:** Sample images from the pruned models. All images will be saved to *run/sample/ddpm_cifar10_pruned*
 ```bash
 bash scripts/sample_ddpm_cifar10_pruned.sh
 ```
 
-**Pretrained:** Sample images from pre-trained models. All images will be saved to *run/sample/ddpm_cifar10_pruned*
+**Pretrained:** Sample images from the pre-trained models. All images will be saved to *run/sample/ddpm_cifar10_pruned*
 ```bash
 bash scripts/sample_ddpm_cifar10_pretrained.sh
 ```
 
 Multi-processing sampling are supported. Please refer to [scripts/sample_ddpm_cifar10_pretrained_distributed.sh](scripts/sample_ddpm_cifar10_pretrained_distributed.sh).
 
-### 4. Computing FID score
-This script is modified from https://github.com/mseitzer/pytorch-fid. 
+### 4. FID score
+This script was modified from https://github.com/mseitzer/pytorch-fid. 
 
 ```bash
 # pre-compute the stats of CIFAR-10 dataset
@@ -75,7 +75,7 @@ python fid_score.py run/sample/ddpm_cifar10_pruned run/fid_stats_cifar10.npz --d
 
 ## Acknowledgement
 
-This project is heavily based on [Diffusers](https://github.com/huggingface/diffusers), [Torch-Pruning](https://github.com/VainF/Torch-Pruning), [pytorch-fid](https://github.com/mseitzer/pytorch-fid). Our experiments were conducted on [ddim](https://github.com/ermongroup/ddim). 
+This project is heavily based on [Diffusers](https://github.com/huggingface/diffusers), [Torch-Pruning](https://github.com/VainF/Torch-Pruning), [pytorch-fid](https://github.com/mseitzer/pytorch-fid). Our experiments were originally conducted on [ddim](https://github.com/ermongroup/ddim). 
 
 ## Citation
 If you find this work helpful, please cite:
@@ -83,7 +83,7 @@ If you find this work helpful, please cite:
 @article{fang2023structural,
   title={Structural pruning for diffusion models},
   author={Fang, Gongfan and Ma, Xinyin and Wang, Xinchao},
-  journal={arXiv preprint arXiv:},
+  journal={arXiv preprint arXiv:2305.10924},
   year={2023}
 }
 ```
