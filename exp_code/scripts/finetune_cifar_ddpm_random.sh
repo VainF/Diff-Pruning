@@ -1,0 +1,13 @@
+python -m torch.distributed.launch --nproc_per_node=2 --master_port 22223 --use_env finetune.py \
+--config cifar10.yml \
+--timesteps 100 \
+--eta 0 \
+--ni \
+--exp run/finetune/cifar10_pruned_random_0.3_finetuned\
+--doc post_training \
+--skip_type quad  \
+--pruning_ratio 0.3 \
+--use_ema \
+--use_pretrained \
+--pruner random \
+--load_pruned_model run/pruned/cifar10_pruned_random_0.3.pth \

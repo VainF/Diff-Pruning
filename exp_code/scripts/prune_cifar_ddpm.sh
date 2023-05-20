@@ -1,0 +1,13 @@
+python prune.py \
+--config cifar10.yml \
+--timesteps 100 \
+--eta 0 \
+--ni \
+--doc post_training \
+--skip_type quad  \
+--pruning_ratio 0.3 \
+--use_ema \
+--use_pretrained \
+--pruner "$1" \
+--save_pruned_model run/pruned_v5/cifar10_pruned_$1_$2.pth \
+--thr $2 \

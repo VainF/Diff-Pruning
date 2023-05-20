@@ -1,0 +1,13 @@
+python prune.py \
+--config celeba.yml \
+--exp run/ddim_celeba_pruning_taylor \
+--timesteps 100 \
+--eta 0 \
+--ni \
+--doc post_training \
+--skip_type quad  \
+--pruning_ratio 0.3 \
+--use_ema \
+--use_pretrained \
+--pruner taylor \
+--taylor_batch_size 96 \

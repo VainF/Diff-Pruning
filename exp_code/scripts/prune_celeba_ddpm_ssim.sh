@@ -1,0 +1,14 @@
+python prune_ssim.py \
+--config celeba.yml \
+--timesteps 100 \
+--eta 0 \
+--ni \
+--doc post_training \
+--skip_type quad  \
+--pruning_ratio 0.15 \
+--use_ema \
+--use_pretrained \
+--stage $1 \
+--pruner "ours" \
+--save_pruned_model run/pruned_v4/celeba_pruned.pth \
+--taylor_batch_size 64

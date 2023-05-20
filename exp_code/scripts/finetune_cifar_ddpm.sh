@@ -1,0 +1,12 @@
+python finetune.py \
+--config cifar10.yml \
+--timesteps 100 \
+--eta 0 \
+--ni \
+--exp run/finetune_v3/cifar10_ddpm_$1_finetuned_0.05T.pth \
+--doc post_training \
+--skip_type quad  \
+--pruning_ratio 0.3 \
+--use_ema \
+--use_pretrained \
+--load_pruned_model run/pruned_v5/cifar10_pruned_$1.pth \

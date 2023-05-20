@@ -1,0 +1,13 @@
+python finetune.py \
+--config celeba.yml \
+--timesteps 100 \
+--eta 0 \
+--ni \
+--exp run/finetune_v2/celeba_ddpm_$1_0.3_finetuned_kd \
+--doc post_training \
+--skip_type quad  \
+--pruning_ratio 0.3 \
+--use_ema \
+--use_pretrained \
+--kd \
+--load_pruned_model run/pruned/celeba_ddpm_$1_0.3.pth  \

@@ -1,0 +1,13 @@
+python prune.py \
+--config church.yml \
+--exp run/sample/ddim_church_official \
+--sample \
+--use_pretrained \
+--timesteps 100 \
+--eta 0 \
+--ni \
+--doc official \
+--skip_type uniform  \
+--pruning_ratio 0.0 \
+--fid \
+--use_ema
