@@ -26,23 +26,6 @@ import utils
 
 logger = get_logger(__name__, log_level="INFO")
 
-def _extract_into_tensor(arr, timesteps, broadcast_shape):
-    """
-    Extract values from a 1-D numpy array for a batch of indices.
-
-    :param arr: the 1-D numpy array.
-    :param timesteps: a tensor of indices into the array to extract.
-    :param broadcast_shape: a larger shape of K dimensions with the batch
-                            dimension equal to the length of timesteps.
-    :return: a tensor of shape [batch_size, 1, ...] where the shape has K dims.
-    """
-    if not isinstance(arr, torch.Tensor):
-        arr = torch.from_numpy(arr)
-    res = arr[timesteps].float().to(timesteps.device)
-    while len(res.shape) < len(broadcast_shape):
-        res = res[..., None]
-    return res.expand(broadcast_shape)
-
 def parse_args():
     parser = argparse.ArgumentParser(description="Simple example of a training script.")
     parser.add_argument("--pruned_model_ckpt", type=str, default=None)
@@ -337,7 +320,7 @@ def main(args):
         ema_model = EMAModel(
             model.parameters(),
             decay=args.ema_max_decay,
-            use_ema_warmup=True,
+            use_ema_warmup=False,
             inv_gamma=args.ema_inv_gamma,
             power=args.ema_power,
             model_cls=UNet2DModel,
@@ -470,30 +453,16 @@ def main(args):
             noisy_images = noise_scheduler.add_noise(clean_images, noise, timesteps)
 
             with accelerator.accumulate(model):
+                optimizer.zero_grad()
                 # Predict the noise residual
                 model_output = model(noisy_images, timesteps).sample
-
-                if args.prediction_type == "epsilon":
-                    loss = (noise - model_output).square().sum(dim=(1, 2, 3)).mean(dim=0)  # this could have different weights!
-                elif args.prediction_type == "sample":
-                    alpha_t = _extract_into_tensor(
-                        noise_scheduler.alphas_cumprod, timesteps, (clean_images.shape[0], 1, 1, 1)
-                    )
-                    snr_weights = alpha_t / (1 - alpha_t)
-                    loss = snr_weights * F.mse_loss(
-                        model_output, clean_images, reduction="none"
-                    )  # use SNR weighting from distillation paper
-                    loss = loss.mean()
-                else:
-                    raise ValueError(f"Unsupported prediction type: {args.prediction_type}")
-
+                loss = (noise - model_output).square().sum(dim=(1, 2, 3)).mean(dim=0) 
                 accelerator.backward(loss)
                 if accelerator.sync_gradients:
                     accelerator.clip_grad_norm_(model.parameters(), 1.0)
                 optimizer.step()
                 lr_scheduler.step()
-                optimizer.zero_grad()
-
+                
             # Checks if the accelerator has performed an optimization step behind the scenes
             if accelerator.sync_gradients:
                 if args.use_ema:

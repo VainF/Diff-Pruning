@@ -198,7 +198,7 @@ class EMAModel:
         self.optimization_step += 1
 
         # Compute the decay factor for the exponential moving average.
-        decay = self.get_decay(self.optimization_step)
+        decay = self.decay #self.get_decay(self.optimization_step)
         self.cur_decay_value = decay
         one_minus_decay = 1 - decay
 
@@ -212,7 +212,8 @@ class EMAModel:
 
             with context_manager():
                 if param.requires_grad:
-                    s_param.sub_(one_minus_decay * (s_param - param))
+                    #s_param.sub_(one_minus_decay * (s_param - param))
+                    s_param.data = one_minus_decay * param.data + decay * s_param.data
                 else:
                     s_param.copy_(param)
 

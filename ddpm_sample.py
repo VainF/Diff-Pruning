@@ -64,7 +64,7 @@ if __name__ == "__main__":
         # num_batches of each process
         num_batches = (args.total_samples) // (args.batch_size * accelerator.num_processes)
         if accelerator.is_main_process:
-            print("Samping {}x{}={} images with {} processes".format(num_batches*args.batch_size, accelerator.num_processes, num_batches*accelerator.num_processes*args.batch_size, accelerator.num_processes))
+            print("Samping {}x{}={} images with {} process(es)".format(num_batches*args.batch_size, accelerator.num_processes, num_batches*accelerator.num_processes*args.batch_size, accelerator.num_processes))
         for i in tqdm(range(num_batches), disable=not accelerator.is_main_process):
             images = pipeline(batch_size=args.batch_size, num_inference_steps=args.ddim_steps, generator=generator).images
             for j, image in enumerate(images):
@@ -75,5 +75,5 @@ if __name__ == "__main__":
     accelerator.wait_for_everyone()
     if accelerator.is_main_process:
         accelerator.print(f"Saved {num_batches*accelerator.num_processes*args.batch_size} samples to {args.output_dir}")
-    accelerator.end_training()
+    #accelerator.end_training()
     
