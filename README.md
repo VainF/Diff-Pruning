@@ -25,6 +25,9 @@ This work presents *Diff-Pruning*, an efficient structrual pruning method for di
 - [ ] Align the performance with the [DDIM Repo](https://github.com/ermongroup/ddim). Our original exp code on DDIM will also be released.
 
 ## Quick Start
+
+Our original exp code based on DDIM can be found at [exp_code](exp_code). There are still some performance issues with the diffuser trainer, which leads to lower FID than the reported (~7 for cifar). We will fix these issues as soon as possible.
+
 ### 0. Data & Pretrained Model
 Download and extract CIFAR-10 images to *data/cifar10_images*
 ```bash
