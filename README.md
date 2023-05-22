@@ -18,6 +18,12 @@ This work presents *Diff-Pruning*, an efficient structrual pruning method for di
 <img src="assets/LSUN.png" width="80%"></img>
 </div>
 
+## Supported Pruners
+- [x] Magnitude Pruner
+- [x] Random Pruner
+- [x] Taylor Pruner
+- [x] Diff-Pruning (A taylor-based method proposed in our paper)   
+
 ## TODO List
 - [ ] Support more diffusion models from Diffusers
 - [ ] Upload checkpoints of pruned models
