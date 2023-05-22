@@ -14,7 +14,7 @@ import utils
 
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("--dataset", type=str, required=True)
+parser.add_argument("--dataset", type=str,  default=None, help="path to an image folder")
 parser.add_argument("--model_path", type=str, required=True)
 parser.add_argument("--save_path", type=str, required=True)
 parser.add_argument("--pruning_ratio", type=float, default=0.3)
