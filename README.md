@@ -97,6 +97,8 @@ python ddpm_prune.py \
 --thr 0.05 \
 --device cuda:0 \
 ```
+The ``dataset`` and ``thr`` arguments only works for taylor & diff-pruning.
+
 
 ## Results
 <div align="center">
