@@ -86,7 +86,7 @@ python fid_score.py --save-stats data/cifar10_images run/fid_stats_cifar10.npz -
 python fid_score.py run/sample/ddpm_cifar10_pruned run/fid_stats_cifar10.npz --device cuda:0 --batch-size 256
 ```
 
-### (Optional) Distributed Training and Sampling with Accelerate
+### 5. (Optional) Distributed Training and Sampling with Accelerate
 This project supports distributed training and sampling. 
 ```bash
 python -m torch.distributed.launch --nproc_per_node=8 --master_port 22222 --use_env <ddpm_sample.py|ddpm_train.py> ...
