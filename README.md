@@ -73,8 +73,6 @@ bash scripts/sample_ddpm_cifar10_pruned.sh
 bash scripts/sample_ddpm_cifar10_pretrained.sh
 ```
 
-Multi-processing sampling are supported. Please refer to [scripts/sample_ddpm_cifar10_pretrained_distributed.sh](scripts/sample_ddpm_cifar10_pretrained_distributed.sh).
-
 ### 4. FID score
 This script was modified from https://github.com/mseitzer/pytorch-fid. 
 
@@ -93,6 +91,8 @@ This project supports distributed training and sampling.
 ```bash
 python -m torch.distributed.launch --nproc_per_node=8 --master_port 22222 --use_env <ddpm_sample.py|ddpm_train.py> ...
 ```
+A multi-processing example can be found at [scripts/sample_ddpm_cifar10_pretrained_distributed.sh](scripts/sample_ddpm_cifar10_pretrained_distributed.sh).
+
 
 ## Prune pre-trained DDPMs from Huggingface
 
