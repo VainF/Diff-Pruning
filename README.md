@@ -40,7 +40,7 @@ Download and extract CIFAR-10 images to *data/cifar10_images*
 python tools/extract_cifar10.py --output data
 ```
 
-The following script will download an official DDPM model and pack it in the format of Huggingface Diffusers. You can find the converted model at *pretrained/ddpm_ema_cifar10*. It is an EMA version of [google/ddpm-cifar10-32](https://huggingface.co/google/ddpm-cifar10-32)
+The following script will download an official DDPM model and convert it to the format of Huggingface Diffusers. You can find the converted model at *pretrained/ddpm_ema_cifar10*. It is an EMA version of [google/ddpm-cifar10-32](https://huggingface.co/google/ddpm-cifar10-32)
 ```bash
 bash tools/convert_cifar10_ddpm_ema.sh
 ```
