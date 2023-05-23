@@ -45,7 +45,7 @@ The following script will download an official DDPM model and convert it to the 
 bash tools/convert_cifar10_ddpm_ema.sh
 ```
 
-(Optional) You can also download the converted model with
+(Optional) You can also download a pre-converted model using wget
 ```bash
 wget https://github.com/VainF/Diff-Pruning/releases/download/v0.0.1/ddpm_ema_cifar10.zip
 ```
