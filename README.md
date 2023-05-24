@@ -112,6 +112,7 @@ The ``dataset`` and ``thr`` arguments only work for taylor & diff-pruning.
 
 
 ### :rocket: [Latent Diffusion Models (LDMs)](https://arxiv.org/abs/2112.10752)
+Example: [CompVis/ldm-celebahq-256](https://huggingface.co/CompVis/ldm-celebahq-256)
 ```bash
 python ldm_prune.py \
 --model_path CompVis/ldm-celebahq-256 \
