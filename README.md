@@ -95,7 +95,7 @@ A multi-processing example can be found at [scripts/sample_ddpm_cifar10_pretrain
 
 ## Prune Pre-trained DPMs from [HuggingFace Diffusers](https://huggingface.co/models?library=diffusers)
 
-### [Denoising Diffusion Probabilistic Models (DDPMs)](https://arxiv.org/abs/2006.11239)
+### :rocket: [Denoising Diffusion Probabilistic Models (DDPMs)](https://arxiv.org/abs/2006.11239)
 Example: [google/ddpm-ema-bedroom-256](https://huggingface.co/google/ddpm-ema-bedroom-256)
 ```bash
 python ddpm_prune.py \
@@ -111,7 +111,7 @@ python ddpm_prune.py \
 The ``dataset`` and ``thr`` arguments only work for taylor & diff-pruning.
 
 
-### [Latent Diffusion Models (LDMs)](https://arxiv.org/abs/2112.10752)
+### :rocket: [Latent Diffusion Models (LDMs)](https://arxiv.org/abs/2112.10752)
 ```bash
 python ldm_prune.py \
 --model_path CompVis/ldm-celebahq-256 \
