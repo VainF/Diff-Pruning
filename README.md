@@ -120,6 +120,7 @@ python ldm_prune.py \
 --pruning_ratio 0.01 \
 --pruner <random|magnitude|reinit>
 --device cuda:0 \
+--batch_size 4 \
 ```
 
 ## Results
