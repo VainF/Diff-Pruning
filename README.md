@@ -103,8 +103,8 @@ python ddpm_prune.py \
 --model_path google/ddpm-ema-bedroom-256 \
 --save_path run/pruned/ddpm_ema_bedroom_256_pruned \
 --pruning_ratio 0.05 \
---batch_size 4 \
 --pruner "<random|magnitude|reinit|taylor|diff-pruning>" \
+--batch_size 4 \
 --thr 0.05 \
 --device cuda:0 \
 ```
@@ -118,8 +118,8 @@ python ldm_prune.py \
 --model_path CompVis/ldm-celebahq-256 \
 --save_path run/pruned/ldm_celeba_pruned \
 --pruning_ratio 0.01 \
---device cuda:0 \
 --pruner <random|magnitude|reinit>
+--device cuda:0 \
 ```
 
 ## Results
