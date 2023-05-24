@@ -52,7 +52,7 @@ if __name__=='__main__':
     scheduler = DDIMScheduler.from_config("CompVis/ldm-celebahq-256", subfolder="scheduler")
 
     # set to cuda
-    torch_device = "cuda" if torch.cuda.is_available() else "cpu"
+    torch_device = torch.device(args.device) if torch.cuda.is_available() else "cpu"
 
     unet.to(torch_device)
     vqvae.to(torch_device)
