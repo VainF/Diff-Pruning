@@ -93,8 +93,9 @@ python -m torch.distributed.launch --nproc_per_node=8 --master_port 22222 --use_
 A multi-processing example can be found at [scripts/sample_ddpm_cifar10_pretrained_distributed.sh](scripts/sample_ddpm_cifar10_pretrained_distributed.sh).
 
 
-## Prune Pre-trained DDPMs from [HuggingFace Diffusers](https://huggingface.co/models?library=diffusers)
+## Prune Pre-trained DPMs from [HuggingFace Diffusers](https://huggingface.co/models?library=diffusers)
 
+### [Denoising Diffusion Probabilistic Models (DDPMs)](https://arxiv.org/abs/2006.11239)
 Example: [google/ddpm-ema-bedroom-256](https://huggingface.co/google/ddpm-ema-bedroom-256)
 ```bash
 python ddpm_prune.py \
@@ -103,12 +104,22 @@ python ddpm_prune.py \
 --save_path run/pruned/ddpm_ema_bedroom_256_pruned \
 --pruning_ratio 0.05 \
 --batch_size 4 \
---pruner "<random|magnitude|taylor|diff-pruning>" \
+--pruner "<random|magnitude|reinit|taylor|diff-pruning>" \
 --thr 0.05 \
 --device cuda:0 \
 ```
 The ``dataset`` and ``thr`` arguments only work for taylor & diff-pruning.
 
+
+### [Latent Diffusion Models (LDMs)](https://arxiv.org/abs/2112.10752)
+```bash
+python ldm_prune.py \
+--model_path CompVis/ldm-celebahq-256 \
+--save_path run/pruned/ldm_celeba_pruned \
+--pruning_ratio 0.01 \
+--device cuda:0 \
+--pruner <random|magnitude|reinit>
+```
 
 ## Results
 <div align="center">
