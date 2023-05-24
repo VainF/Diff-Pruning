@@ -117,8 +117,8 @@ Example: [CompVis/ldm-celebahq-256](https://huggingface.co/CompVis/ldm-celebahq-
 python ldm_prune.py \
 --model_path CompVis/ldm-celebahq-256 \
 --save_path run/pruned/ldm_celeba_pruned \
---pruning_ratio 0.01 \
---pruner <random|magnitude|reinit>
+--pruning_ratio 0.05 \
+--pruner "<random|magnitude|reinit>" \
 --device cuda:0 \
 --batch_size 4 \
 ```
