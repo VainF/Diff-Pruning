@@ -73,7 +73,7 @@ bash scripts/sample_ddpm_cifar10_pruned.sh
 bash scripts/sample_ddpm_cifar10_pretrained.sh
 ```
 
-### 4. FID score
+### 4. FID Score
 This script was modified from https://github.com/mseitzer/pytorch-fid. 
 
 ```bash
@@ -94,7 +94,7 @@ python -m torch.distributed.launch --nproc_per_node=8 --master_port 22222 --use_
 A multi-processing example can be found at [scripts/sample_ddpm_cifar10_pretrained_distributed.sh](scripts/sample_ddpm_cifar10_pretrained_distributed.sh).
 
 
-## Prune pre-trained DDPMs from Huggingface
+## Prune Pre-trained DDPMs from [HuggingFace Diffusers](https://huggingface.co/models?library=diffusers)
 
 Example: [google/ddpm-ema-bedroom-256](https://huggingface.co/google/ddpm-ema-bedroom-256)
 ```bash
@@ -113,8 +113,8 @@ The ``dataset`` and ``thr`` arguments only work for taylor & diff-pruning.
 
 ## Results
 <div align="center">
-<img src="assets/exp.png" width="70%"></img>
-<img src="assets/exp2.png" width="70%"></img>
+<img src="assets/exp.png" width="75%"></img>
+<img src="assets/exp2.png" width="75%"></img>
 </div>
 
 
