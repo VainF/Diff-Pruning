@@ -134,6 +134,7 @@ class DDIMScheduler(SchedulerMixin, ConfigMixin):
         beta_start: float = 0.0001,
         beta_end: float = 0.02,
         beta_schedule: str = "linear",
+        skip_type = 'uniform',
         trained_betas: Optional[Union[np.ndarray, List[float]]] = None,
         clip_sample: bool = True,
         set_alpha_to_one: bool = True,
@@ -161,6 +162,7 @@ class DDIMScheduler(SchedulerMixin, ConfigMixin):
 
         self.alphas = 1.0 - self.betas
         self.alphas_cumprod = torch.cumprod(self.alphas, dim=0)
+        self.skip_type = skip_type
 
         # At every step in ddim, we are looking into the previous alphas_cumprod
         # For the final step, there is no previous alphas_cumprod because we are already at 0
@@ -251,9 +253,17 @@ class DDIMScheduler(SchedulerMixin, ConfigMixin):
             )
 
         self.num_inference_steps = num_inference_steps
-        step_ratio = (self.config.num_train_timesteps-1) / (self.num_inference_steps-1) # using // will lead to T_max=990
-        timesteps = (np.arange(0, num_inference_steps) * step_ratio).round()[::-1].copy().astype(np.int64)
-        #timesteps = (np.arange(0, num_inference_steps) * step_ratio).round()[::-1].copy().astype(np.int64)
+
+        if self.skip_type == 'uniform':
+            step_ratio = (self.config.num_train_timesteps-1) / (self.num_inference_steps-1)
+            timesteps = (np.arange(0, num_inference_steps) * step_ratio).round()[::-1].copy().astype(np.int64)
+            #print(timesteps)
+        elif self.skip_type == 'quad':
+            step_ratio = (self.config.num_train_timesteps-1) / (self.num_inference_steps-1)**2
+            timesteps = (np.arange(0, num_inference_steps)**2 * step_ratio).round()[::-1].copy().astype(np.int64)
+            #print(timesteps)
+        else:
+            raise NotImplementedError(f"skip_type {self.skip_type} is not implemented")
         self.timesteps = torch.from_numpy(timesteps).to(device)
         self.timesteps += self.config.steps_offset
 

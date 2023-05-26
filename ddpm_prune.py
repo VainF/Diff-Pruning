@@ -93,6 +93,7 @@ if __name__=='__main__':
 
         if args.pruner in ['taylor', 'diff-pruning']:
             loss_max = 0
+            print("Accumulating gradients for pruning...")
             for step_k in tqdm(range(1000)):
                 timesteps = (step_k*torch.ones((args.batch_size,), device=clean_images.device)).long()
                 noisy_images = scheduler.add_noise(clean_images, noise, timesteps)

@@ -12,6 +12,7 @@ parser.add_argument("--model_path", type=str, default="samples")
 parser.add_argument("--ddim_steps", type=int, default=100)
 parser.add_argument("--pruned_model_ckpt", type=str, default=None)
 parser.add_argument("--seed", type=int, default=0)
+parser.add_argument("--skip_type", type=str, default="uniform")
 
 args = parser.parse_args()
 
@@ -39,6 +40,7 @@ if __name__ == "__main__":
             args.model_path,
         )
 
+    pipeline.scheduler.skip_type = args.skip_type
     # Test Flops
     pipeline.to(accelerator.device)
     if accelerator.is_main_process:
