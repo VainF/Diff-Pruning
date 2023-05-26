@@ -1,6 +1,6 @@
 accelerate
 torchvision>=0.13.1
 scipy
-torch>=1.8.1
+torch>=1.12.1
 tqdm
 numpy
