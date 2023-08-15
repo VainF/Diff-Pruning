@@ -4,3 +4,4 @@ scipy
 torch>=1.12.1
 tqdm
 numpy
+torch_pruning
