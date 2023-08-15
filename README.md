@@ -141,9 +141,9 @@ python ldm_prune.py \
 <img src="assets/exp2.png" width="75%"></img>
 </div>
 
-* **Conditional LDM on ImageNet-1K 224**
+* **Conditional LDM on ImageNet-1K 256**
 
-We also have some results on Conditional LDM for ImageNet-1K 224x224, where we finetune a pruned LDM for only 4 epochs. Will release the training script soon.
+We also have some results on Conditional LDM for ImageNet-1K 256x256, where we finetune a pruned LDM for only 4 epochs. Will release the training script soon.
 <div align="center">
 <img src="https://github.com/VainF/Diff-Pruning/assets/18592211/872660d0-ce59-40ce-b9ba-42fc44343fcf" width="80%"></img>
 </div>
