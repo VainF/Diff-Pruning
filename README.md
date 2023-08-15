@@ -37,7 +37,7 @@ This example shows how to prune a DDPM model pre-trained on CIFAR-10. Note that 
 
 * Requirements
 ```bash
-pip install -f requirements.txt
+pip install -r requirements.txt
 ```
  
 * Data
