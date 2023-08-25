@@ -33,12 +33,21 @@ This work presents *Diff-Pruning*, an efficient structrual pruning method for di
 
 This example shows how to prune a DDPM model pre-trained on CIFAR-10. Note that Diffusers does not support [``skip_type='quad'``](https://github.com/ermongroup/ddim/issues/3) in DDIM, you may get slightly worse FID scores for both pre-trained models (FID=4.5) and pruned models (FID=5.6). We are working on this to implement the quad strategy for Diffusers. Our original exp code for the paper is available at [exp_code](exp_code).
 
-### 0. Data & Pretrained Model
-Download and extract CIFAR-10 images to *data/cifar10_images*
+### 0. Requirements, Data and Pretrained Model
+
+* Requirements
+```bash
+pip install -r requirements.txt
+```
+ 
+* Data
+  
+Download and extract CIFAR-10 images to *data/cifar10_images* for training and evaluation.
 ```bash
 python tools/extract_cifar10.py --output data
 ```
-
+* Pretrained Models
+  
 The following script will download an official DDPM model and convert it to the format of Huggingface Diffusers. You can find the converted model at *pretrained/ddpm_ema_cifar10*. It is an EMA version of [google/ddpm-cifar10-32](https://huggingface.co/google/ddpm-cifar10-32)
 ```bash
 bash tools/convert_cifar10_ddpm_ema.sh
@@ -124,15 +133,25 @@ python ldm_prune.py \
 ```
 
 ## Results
+
+* **DDPM on Cifar-10, CelebA and LSUN**
+
 <div align="center">
 <img src="assets/exp.png" width="75%"></img>
 <img src="assets/exp2.png" width="75%"></img>
 </div>
 
+* **Conditional LDM on ImageNet-1K 256**
+
+We also have some results on Conditional LDM for ImageNet-1K 256x256, where we finetune a pruned LDM for only 4 epochs. Will release the training script soon.
+<div align="center">
+<img src="https://github.com/VainF/Diff-Pruning/assets/18592211/872660d0-ce59-40ce-b9ba-42fc44343fcf" width="80%"></img>
+</div>
+
 
 ## Acknowledgement
 
-This project is heavily based on [Diffusers](https://github.com/huggingface/diffusers), [Torch-Pruning](https://github.com/VainF/Torch-Pruning), [pytorch-fid](https://github.com/mseitzer/pytorch-fid). Our experiments were originally conducted on [ddim](https://github.com/ermongroup/ddim). 
+This project is heavily based on [Diffusers](https://github.com/huggingface/diffusers), [Torch-Pruning](https://github.com/VainF/Torch-Pruning), [pytorch-fid](https://github.com/mseitzer/pytorch-fid). Our experiments were conducted on [ddim](https://github.com/ermongroup/ddim) and [LDM](https://github.com/CompVis/latent-diffusion).
 
 ## Citation
 If you find this work helpful, please cite:
