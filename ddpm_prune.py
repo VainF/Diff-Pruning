@@ -39,7 +39,7 @@ if __name__=='__main__':
             dataset, batch_size=args.batch_size, shuffle=True, num_workers=4, drop_last=True
         )
         import torch_pruning as tp
-        clean_images = iter(train_dataloader).next()
+        clean_images = next(iter(train_dataloader))
         if isinstance(clean_images, (list, tuple)):
             clean_images = clean_images[0]
         clean_images = clean_images.to(args.device)
