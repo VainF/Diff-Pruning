@@ -309,7 +309,7 @@ def main():
             base_macs, base_nparams = tp.utils.count_ops_and_params(model, example_inputs)
 
             if 'taylor' in args.pruner or args.pruner=='ours':
-                x = iter(train_dataloader).next()
+                x = next(iter(train_dataloader))
                 if isinstance(x, (list, tuple)):
                     x = x[0]
                 x = x.to(runner.device)
@@ -333,7 +333,7 @@ def main():
                             max_loss = loss
                         if loss<max_loss*args.thr:
                             break
-                        print(loss, max_loss)
+                        #print(loss, max_loss)
                     loss.backward()
 
             print("============ Before Pruning ============")
