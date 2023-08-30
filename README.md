@@ -35,8 +35,11 @@ This example shows how to prune a DDPM model pre-trained on CIFAR-10. Note that 
 
 #### Pruning with DDIM codebase:
 ```bash
-cd exp_code 
+cd exp_code
+# Prune & Finetune
 bash scripts/simple_cifar_our.sh 0.05 # the pre-trained model and data will be automatically prepared
+# Sampling
+bash scripts/sample_cifar_ddpm_pruning.sh run/finetune_simple_v2/cifar10_ours_T=0.05.pth/logs/post_training/ckpt_100000.pth run/sample
 ```
 
 ### 0. Requirements, Data and Pretrained Model
