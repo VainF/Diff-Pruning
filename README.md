@@ -41,6 +41,12 @@ bash scripts/simple_cifar_our.sh 0.05 # the pre-trained model and data will be a
 # Sampling
 bash scripts/sample_cifar_ddpm_pruning.sh run/finetune_simple_v2/cifar10_ours_T=0.05.pth/logs/post_training/ckpt_100000.pth run/sample
 ```
+Output:
+```
+Found 49984 files.
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 391/391 [00:49<00:00,  7.97it/s]
+FID:  5.242662673752534
+```
 
 ### 0. Requirements, Data and Pretrained Model
 
