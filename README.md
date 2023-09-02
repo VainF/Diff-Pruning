@@ -31,7 +31,7 @@ This work presents *Diff-Pruning*, an efficient structrual pruning method for di
 
 ## Quick Start
 
-This example shows how to prune a DDPM model pre-trained on CIFAR-10. Note that Diffusers does not support [``skip_type='quad'``](https://github.com/ermongroup/ddim/issues/3) in DDIM, you may get slightly worse FID scores for both pre-trained models (FID=4.5) and pruned models (FID=5.6). We are working on this to implement the quad strategy for Diffusers. Our original exp code for the paper is available at [exp_code](exp_code).
+This example shows how to prune a DDPM model pre-trained on CIFAR-10. Note that Diffusers does not support [``skip_type='quad'``](https://github.com/ermongroup/ddim/issues/3) in DDIM, you may get slightly worse FID scores with Diffusers for both pre-trained models (FID=4.5) and pruned models (FID=5.6). We are working on this to implement the quad strategy for Diffusers. Our original exp code for the paper is available at [exp_code](exp_code).
 
 #### Pruning with DDIM codebase:
 ```bash
