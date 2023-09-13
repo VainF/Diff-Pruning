@@ -29,11 +29,10 @@ This work presents *Diff-Pruning*, an efficient structrual pruning method for di
 - [ ] Training scripts for CelebA-HQ, LSUN Church & LSUN Bedroom
 - [ ] Align the performance with the [DDIM Repo](https://github.com/ermongroup/ddim). 
 
-## Quick Start
+## Pruning with DDIM codebase
 
-This example shows how to prune a DDPM model pre-trained on CIFAR-10. Note that Diffusers does not support [``skip_type='quad'``](https://github.com/ermongroup/ddim/issues/3) in DDIM, you may get slightly worse FID scores with Diffusers for both pre-trained models (FID=4.5) and pruned models (FID=5.6). We are working on this to implement the quad strategy for Diffusers. Our original exp code for the paper is available at [exp_code](exp_code).
+This example shows how to prune a DDPM model pre-trained on CIFAR-10 using the [DDIM codebase](https://github.com/ermongroup/ddim). Note that Diffusers does not support [``skip_type='quad'``](https://github.com/ermongroup/ddim/issues/3) in DDIM, you may get slightly worse FID scores with Diffusers for both pre-trained models (FID=4.5) and pruned models (FID=5.6). We are working on this to implement the quad strategy for Diffusers. For reproducibility, we provide our original **but unorganized** exp code for the paper in [exp_code](exp_code). 
 
-#### Pruning with DDIM codebase:
 ```bash
 cd exp_code
 # Prune & Finetune
@@ -47,6 +46,10 @@ Found 49984 files.
 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 391/391 [00:49<00:00,  7.97it/s]
 FID:  5.242662673752534
 ```
+
+## Pruning with Huggingface Diffusers
+
+The following pipeline prunes a pre-trained DDPM on CIFAR-10 with [Huggingface Diffusers](https://github.com/huggingface/diffusers).
 
 ### 0. Requirements, Data and Pretrained Model
 
