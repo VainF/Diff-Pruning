@@ -177,7 +177,7 @@ If you find this work helpful, please cite:
 @article{fang2023structural,
   title={Structural pruning for diffusion models},
   author={Fang, Gongfan and Ma, Xinyin and Wang, Xinchao},
-  journal={arXiv preprint arXiv:2305.10924},
+  journal={Advances in Neural Information Processing Systems},
   year={2023}
 }
 ```
