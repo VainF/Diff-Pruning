@@ -174,11 +174,11 @@ This project is heavily based on [Diffusers](https://github.com/huggingface/diff
 ## Citation
 If you find this work helpful, please cite:
 ```
-@article{fang2023structural,
+@inproceedings{fang2023structural,
   title={Structural pruning for diffusion models},
-  author={Fang, Gongfan and Ma, Xinyin and Wang, Xinchao},
-  journal={Advances in Neural Information Processing Systems},
-  year={2023}
+  author={Gongfan Fang and Xinyin Ma and Xinchao Wang},
+  booktitle={Advances in Neural Information Processing Systems},
+  year={2023},
 }
 ```
 
