@@ -40,6 +40,9 @@ bash scripts/simple_cifar_our.sh 0.05 # the pre-trained model and data will be a
 # Sampling
 bash scripts/sample_cifar_ddpm_pruning.sh run/finetune_simple_v2/cifar10_ours_T=0.05.pth/logs/post_training/ckpt_100000.pth run/sample
 ```
+
+For FID, please refer to [this section](https://github.com/VainF/Diff-Pruning#4-fid-score).  
+
 Output:
 ```
 Found 49984 files.
