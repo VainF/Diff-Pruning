@@ -159,7 +159,7 @@ python ldm_prune.py \
 
 <div align="center">
 <img src="assets/exp.png" width="75%"></img>
-<img src="assets/exp2.png" width="75%"></img>
+<img src="https://github.com/VainF/Diff-Pruning/assets/18592211/39b3a7ad-2abb-4934-9ee0-07724029660b" width="75%"></img>
 </div>
 
 * **Conditional LDM on ImageNet-1K 256**
@@ -168,7 +168,7 @@ We also have some results on Conditional LDM for ImageNet-1K 256x256, where we f
 
 <div align="center">
 <img src="https://github.com/VainF/Diff-Pruning/assets/18592211/31dbf489-2ca2-4625-ba54-5a5ff4e4a626" width="75%"></img>
-<img src="https://github.com/VainF/Diff-Pruning/assets/18592211/20d546c5-9012-4ba9-80b2-96ed29da7d07" width="80%"></img>
+<img src="https://github.com/VainF/Diff-Pruning/assets/18592211/20d546c5-9012-4ba9-80b2-96ed29da7d07" width="85%"></img>
 </div>
 
 
