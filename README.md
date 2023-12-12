@@ -5,8 +5,7 @@
 </div>
 
 ## Update
-Check our latest work [DeepCache](https://horseee.github.io/Diffusion_DeepCache/), a **training-free and almost loessless** method for diffusion model acceleration. 
-
+Check our latest work [DeepCache](https://horseee.github.io/Diffusion_DeepCache/), a **training-free and almost loessless** method for diffusion model acceleration. It can be viewed as a special pruning technique that executes only the shallow layer during inference and skips all other ones.
 
 
 ## Introduction
