@@ -189,3 +189,5 @@ tags
 .ruff_cache
 
 wandb
+
+__pycache__

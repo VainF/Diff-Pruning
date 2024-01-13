@@ -1,0 +1,2 @@
+CUDA_VISIBLE_DEVICES=0 python prune_ldm.py --sparsity 0.3 --pruner diff-pruning
+python main.py --base configs/latent-diffusion/cin256-v2.yaml  -t --gpus 0,1,2,3 --load_pruned_model logs/pruned_model_0.3_diff-pruning.pt
