@@ -1,0 +1,12 @@
+python prune.py \
+--config church.yml \
+--exp run/ddim_church_pruning_taylor \
+--timesteps 100 \
+--eta 0 \
+--ni \
+--doc post_training \
+--skip_type quad  \
+--pruning_ratio 0.3 \
+--use_ema \
+--use_pretrained \
+--pruner random \

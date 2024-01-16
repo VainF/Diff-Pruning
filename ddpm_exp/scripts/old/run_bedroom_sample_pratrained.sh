@@ -1,0 +1,13 @@
+python prune.py \
+--config bedroom.yml \
+--exp run/ddim_bedroom_official \
+--sample \
+--use_pretrained \
+--timesteps 50 \
+--eta 0 \
+--ni \
+--doc 50steps_quad \
+--skip_type quad  \
+--pruning_ratio 0.0 \
+--fid \
+--use_ema

@@ -1,0 +1,13 @@
+python finetune.py \
+--config church.yml \
+--exp run/sample/church_ddpm_350k \
+--sample \
+--timesteps 100 \
+--eta 0 \
+--ni \
+--doc sample \
+--skip_type uniform  \
+--pruning_ratio 0.0 \
+--fid \
+--use_ema \
+--restore_from run/finetune_v2/church_pruned_taylor_0.3_finetuned/logs/post_training/ckpt_350000.pth \

@@ -1,0 +1,13 @@
+python prune.py \
+--config celeba.yml \
+--exp run/sample/ddim_celeba_official \
+--sample \
+--use_pretrained \
+--timesteps 100 \
+--eta 0 \
+--ni \
+--doc official \
+--skip_type uniform  \
+--pruning_ratio 0.0 \
+--fid \
+--use_ema

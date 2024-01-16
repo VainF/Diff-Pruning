@@ -1,0 +1,12 @@
+python finetune.py \
+--config celeba.yml \
+--timesteps 100 \
+--eta 0 \
+--ni \
+--exp run/finetune_final/celeba_T=$1_finetuned \
+--doc post_training \
+--skip_type uniform  \
+--pruning_ratio 0.3 \
+--use_ema \
+--use_pretrained \
+--load_pruned_model "run/pruned_final/celeba_T=$1.pth" \

@@ -1,0 +1,13 @@
+python -m torch.distributed.launch --nproc_per_node=4 --master_port 22221 --use_env finetune.py \
+--config church.yml \
+--exp $2 \
+--sample \
+--timesteps 100 \
+--eta 0 \
+--ni \
+--doc sample \
+--skip_type uniform  \
+--pruning_ratio 0.0 \
+--fid \
+--use_ema \
+--restore_from $1 \

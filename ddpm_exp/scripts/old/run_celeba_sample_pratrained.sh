@@ -1,0 +1,14 @@
+python prune.py \
+--config celeba.yml \
+--exp run/ddim_celeba_official \
+--sample \
+--use_pretrained \
+--timesteps 100 \
+--eta 0 \
+--ni \
+--doc 100steps_quad \
+--skip_type quad  \
+--pruning_ratio 0.0 \
+--fid \
+--use_ema \
+--restore_from run/cache/diffusion_models_converted/celeba/ckpt.pth \
