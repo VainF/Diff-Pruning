@@ -95,7 +95,7 @@ pruner = tp.pruner.MagnitudePruner(
     channel_groups =channel_groups,
     ch_sparsity=args.sparsity, # remove 50% channels, ResNet18 = {64, 128, 256, 512} => ResNet18_Half = {32, 64, 128, 256}
     ignored_layers=ignored_layers,
-    root_module_types=[torch.nn.Conv2d, torch.nn.Linear],
+    target_layer_types=[torch.nn.Conv2d, torch.nn.Linear],
     round_to=2
 )
 model.zero_grad()
@@ -117,8 +117,8 @@ for t in range(1000):
                                     unconditional_conditioning=uc, 
                                     eta=ddim_eta)
 
-    encoded = model.encode_first_stage(samples_ddim)
-    example_inputs = {"x": encoded.to(model.device), "timesteps": torch.full((n_samples_per_class,), t, device=model.device, dtype=torch.long), "context": c}
+    #encoded = model.encode_first_stage(samples_ddim)
+    example_inputs = {"x": samples_ddim.to(model.device), "timesteps": torch.full((n_samples_per_class,), t, device=model.device, dtype=torch.long), "context": c}
     loss = model.get_loss_at_t(example_inputs['x'], {model.cond_stage_key: xc.to(model.device)}, example_inputs['timesteps'])
     loss = loss[0]
     if loss > max_loss:
